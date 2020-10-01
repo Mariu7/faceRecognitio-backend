@@ -1,9 +1,11 @@
 // 281-283
 import express from 'express';
 import bcrypt from 'bcrypt-nodejs';
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 //"Database" for now
 const database = {
     users: [
@@ -11,13 +13,15 @@ const database = {
             id: '123',
             name: 'John',
             email: 'john@gmail.com',
+            password: 'cookies',
             entries: 0,
             joined: new Date()
         },
         {
             id: '124',
             name: 'Sally',
-            email: 'sally@gmail.com',            
+            email: 'sally@gmail.com',   
+            password: 'bananas',         
             entries: 0,
             joined: new Date()
         }
@@ -36,13 +40,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/signin', (req, res) => {
-    bcrypt.compare("apples", '$2a$10$AvH5Wq72tQRdKfvxSVVRD.rHMNeUq8y5fx9KZ28L3YitnZhJi1SRu', function(err, res) {
-        console.log('correct pass', res)
-    });
-    bcrypt.compare("veggies", '$2a$10$AvH5Wq72tQRdKfvxSVVRD.rHMNeUq8y5fx9KZ28L3YitnZhJi1SRu', function(err, res) {
-        console.log('Incorrect pass', res)
-    });
-    if (req.body.email === database.users[0].email &&
+      if (req.body.email === database.users[0].email &&
         req.body.password === database.users[0].password) {
             res.json('success');
     }   else {
